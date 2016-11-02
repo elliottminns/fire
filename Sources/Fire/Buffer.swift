@@ -12,7 +12,7 @@ class Buffer {
     
     let size: Int
     
-    let buffer: UnsafeMutablePointer<Void>
+    let buffer: UnsafeMutableRawPointer
     
     // Used to prevent the string from dying.
     private var bytes: [UInt8] = []
@@ -20,22 +20,18 @@ class Buffer {
     init(string: String) {
         self.bytes = [UInt8](string.utf8)
         let bytes = UnsafeMutablePointer<UInt8>(mutating: self.bytes)
-        self.buffer = UnsafeMutablePointer<Void>(bytes)
+        self.buffer = UnsafeMutableRawPointer(bytes)
         self.size = self.bytes.count
     }
     
     init(size: Int) {
         self.size = size
-        #if !swift(>=3.0)
-        self.buffer = UnsafeMutablePointer<Void>.alloc(size)
-        #else
-        self.buffer = UnsafeMutablePointer<Void>.allocate(capacity: size)
-        #endif
+        self.buffer = UnsafeMutableRawPointer.allocate(bytes: size, alignedTo: 1)
 
     }
     
     deinit {
-//        self.buffer.dealloc(size)
+        self.buffer.deallocate(bytes: size, alignedTo: 1)
     }
     
     func toString() -> String {
