@@ -31,7 +31,7 @@ class Buffer {
     }
     
     deinit {
-        self.buffer.deallocate(bytes: size, alignedTo: 1)
+//        self.buffer.deallocate(bytes: size, alignedTo: 1)
     }
     
     func toString() -> String {
