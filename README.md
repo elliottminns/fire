@@ -10,7 +10,7 @@ Because fire is so basic, it can be used as a starting point for your own web fr
 main.swift
 ```
 
-```
+```swift
 import Fire
 import Foundation
 
