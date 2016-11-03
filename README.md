@@ -1,5 +1,8 @@
 # Fire
 
+![Fire Image]
+(http://i.imgur.com/JK3PQo2.jpg)
+
 Fire is a basic yet extremely fast connection based server.
 
 ## How can I use it?
