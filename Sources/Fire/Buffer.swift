@@ -31,11 +31,12 @@ class Buffer {
     init(size: Int) {
         self.size = size
         self.buffer = UnsafeMutableRawPointer.allocate(bytes: size, alignedTo: 1)
-
     }
     
     deinit {
-//        self.buffer.deallocate(bytes: size, alignedTo: 1)
+        if (self.size != self.bytes.count) {
+            self.buffer.deallocate(bytes: size, alignedTo: 1)
+        }
     }
     
     func toString() -> String {
