@@ -31,3 +31,41 @@ try? server.listen(port: 3000)
 
 RunLoop.main.run()
 ```
+
+## What about JSON?
+
+Super easy
+
+```swift
+import Fire
+import Foundation
+
+class Handler: HTTPServerDelegate {
+    
+    func server(_ server: HTTPServer,
+                didReceive request: HTTPRequest,
+                response: HTTPResponse) {
+        
+        let json = [
+            "server": "fire",
+            "speed": "blazing",
+            "easeOfUse": "high"
+        ] as [String : Any]
+        
+        // json can fail to parse, so we want to catch that.
+        do {
+            try response.send(json: json)
+        } catch {
+            response.send(error: "Could not send JSON")
+        }
+    }
+}
+
+let delegate = Handler()
+
+let server = HTTPServer(delegate: delegate)
+
+try? server.listen(port: 3000)
+
+RunLoop.main.run()
+```
