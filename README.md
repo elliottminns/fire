@@ -1,5 +1,3 @@
-# Fire
-
 ![Fire Image]
 (http://i.imgur.com/jk3iigF.jpg)
 
