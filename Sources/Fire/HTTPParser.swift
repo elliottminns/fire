@@ -1,10 +1,3 @@
-//
-//  HTTPParser.swift
-//  Echo
-//
-//  Created by Elliott Minns on 14/05/2016.
-//  Copyright © 2016 Elliott Minns. All rights reserved.
-//
 
 import Foundation
 
@@ -70,7 +63,4 @@ struct HTTPParser {
         
         return headers
     }
-
-    
-    
 }

@@ -1,10 +1,3 @@
-//
-//  HTTPResponse.swift
-//  Echo
-//
-//  Created by Elliott Minns on 14/05/2016.
-//  Copyright © 2016 Elliott Minns. All rights reserved.
-//
 
 import Foundation
 
@@ -50,6 +43,13 @@ public class HTTPResponse {
     public func send(html: String) {
         self.headers["Content-Type"] = "text/html"
         self.body = Buffer(string: html)
+        send()
+    }
+    
+    public func send(json: Any) throws {
+        self.headers["Content-Type"] = "text/json"
+        let data = try JSONSerialization.data(withJSONObject: json, options: [])
+        self.body = Buffer(data: data)
         send()
     }
     
