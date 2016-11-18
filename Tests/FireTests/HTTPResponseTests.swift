@@ -49,7 +49,11 @@ class HTTPResponseTests: XCTestCase {
         XCTAssertEqual(connection.data!.bytes, data.bytes)
     }
 
-
+    func testSendingJson() {
+        try? response.send(json: ["Hello": "World"])
+        let data = Fire.Data(string: "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: 17\r\n\r\n{\"Hello\":\"World\"}")
+        XCTAssertEqual(connection.data!.bytes, data.bytes)
+    }
 
     static var allTests : [(String, (HTTPResponseTests) -> () throws -> Void)] {
         return [
