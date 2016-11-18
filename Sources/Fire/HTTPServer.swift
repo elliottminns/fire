@@ -54,7 +54,7 @@ extension HTTPServer: ServerDelegate {
             data.append(buffer.buffer, length: amount)
             
             do {
-                let request = try HTTPParser(data: data).parse()
+                guard let request = try HTTPParser(data: data).parse() else { return }
                 request.connection = connection
                 
                 let response = HTTPResponse(connection: connection)

@@ -9,24 +9,22 @@ public class Connection {
     
     let socket: Socket
     
-    let readBuffer: Buffer
-    
     var writeData: Data
     
     var readSource: DispatchSourceRead?
     
     init(socket: Socket) {
         self.socket = socket
-        self.readBuffer = Buffer(size: 1024)
         self.writeData = Data()
     }
     
     func read(callback: @escaping (_ data: Buffer, _ amount: Int) -> ()) {
-        readSource = DispatchSource.makeReadSource(fileDescriptor: Int32(socket.raw), queue: DispatchQueue.main)
-
+        let fd = Int32(socket.raw)
+        readSource = DispatchSource.makeReadSource(fileDescriptor: fd,
+                                                   queue: DispatchQueue.main)
+        let buffer = Buffer(size: 256)
+        
         readSource?.setEventHandler {
-            
-            let buffer = Buffer(size: 1024)
             
             let amount = systemRead(self.socket.raw, buffer.buffer, buffer.size)
             
@@ -34,6 +32,7 @@ public class Connection {
                 self.readSource?.cancel()
             } else if amount == 0 {
                 callback(buffer, amount)
+                self.readSource?.cancel()
             } else {
                 callback(buffer, amount)
             }
