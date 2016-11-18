@@ -1,7 +1,7 @@
 
 import Foundation
 
-class Buffer {
+public class Buffer {
     
     let size: Int
     

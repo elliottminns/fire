@@ -64,7 +64,6 @@ public class Server {
         }
         
         #if os(Linux)
-//        dispatch_resume(dispatch_object_t(_ds: dispatcher))
             dispatcher.resume()
         #else
             dispatcher.resume()
@@ -77,7 +76,7 @@ public class Server {
         let fd = systemAccept(self.socket.raw, addr, &len)
         let client = try Socket(raw: fd)
         addr.deallocate(capacity: 1)
-        return Connection(socket: client)
+        return SocketConnection(socket: client)
     }
     
     private func bind(socket: Socket, address: Address) throws {

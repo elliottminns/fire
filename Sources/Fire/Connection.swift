@@ -5,7 +5,19 @@ import Foundation
 import Dispatch
 #endif
 
-public class Connection {
+public protocol Connection {
+    func read(callback: @escaping (_ data: Buffer, _ amount: Int) -> ())
+    func write(data: Data)
+}
+
+extension Connection {
+    func write(_ string: String) {
+        let writeData = Data(string: string)
+        write(data: writeData)
+    }
+}
+
+public class SocketConnection: Connection {
     
     let socket: Socket
     
@@ -18,7 +30,7 @@ public class Connection {
         self.writeData = Data()
     }
     
-    func read(callback: @escaping (_ data: Buffer, _ amount: Int) -> ()) {
+    public func read(callback: @escaping (_ data: Buffer, _ amount: Int) -> ()) {
         let fd = Int32(socket.raw)
         readSource = DispatchSource.makeReadSource(fileDescriptor: fd,
                                                    queue: DispatchQueue.main)
@@ -44,12 +56,6 @@ public class Connection {
             readSource?.resume()
         #endif
         
-    }
-
-    public func write(_ string: String) {
-
-        let writeData = Data(string: string)
-        write(data: writeData)
     }
 
     public func write(data: Data) {
