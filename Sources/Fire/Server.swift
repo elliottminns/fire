@@ -76,6 +76,7 @@ public class Server {
         var len = socklen_t(0)
         let fd = systemAccept(self.socket.raw, addr, &len)
         let client = try Socket(raw: fd)
+        addr.deallocate(capacity: 1)
         return Connection(socket: client)
     }
     

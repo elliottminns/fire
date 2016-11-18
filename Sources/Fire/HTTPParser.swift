@@ -14,9 +14,14 @@ struct HTTPParser {
 		self.data = data
 	}
 
-    func parse() throws -> HTTPRequest {
+    func parse() throws -> HTTPRequest? {
         
         let raw = try self.data.toString()
+        
+        guard raw.contains("\r\n\r\n") else {
+            return nil
+        }
+
         var lines = raw.components(separatedBy: "\r\n")
         let firstLine = lines.removeFirst()
         let route = try loadRoute(line: firstLine)

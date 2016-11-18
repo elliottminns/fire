@@ -25,13 +25,19 @@ public class HTTPResponse {
     }
     
     func send() {
-        var http = "HTTP/1.1 \(status)\r\n"
+        let status = HTTPStatus(status: self.status)
+        var http = "HTTP/1.1 \(status.stringValue)\r\n"
         for (key, value) in headers {
             http += "\(key): \(value)\r\n"
         }
         http += "\r\n"
         http += self.body.toString()
         connection.write(http)
+    }
+    
+    public func send(status: Int) {
+        self.status = status
+        self.send()
     }
     
     public func send(text: String) {
@@ -47,7 +53,7 @@ public class HTTPResponse {
     }
     
     public func send(json: Any) throws {
-        self.headers["Content-Type"] = "text/json"
+        self.headers["Content-Type"] = "application/json"
         let data = try JSONSerialization.data(withJSONObject: json, options: [])
         self.body = Buffer(data: data)
         send()
@@ -58,8 +64,9 @@ public class HTTPResponse {
     }
     
     public func send(error: String) {
-        status = 400
-        
+        status = 500
+        self.body = Buffer(string: error)
+        self.send()
     }
     
     
